@@ -27,9 +27,9 @@ Test    ← {fn←{C‿A𝕊e : C◶A‿E}´𝕩 ⋄ Fn@}
 Swap ← {0‿1 𝕊 𝕩 ; ⋈˜´⌾(𝕨⊸⊏)𝕩}
 
 Partition ← {w 𝕊 x : x⊔˜-¬({+`1∾<´˘2↕𝕩}×¬)x∊w}
-# "Partion spec1" ! ⟨"A","BC","D","E"⟩  ≡ "x,z" Partition "xA,BCzzDx,zEx"
-# "Partion spec2" ! ⟨"AB","C","DE"⟩     ≡   " " Partition "AB C  DE"
-# "Partion spec3" ! ⟨⟨¯3,¯2⟩,⟨0⟩,⟨2,3⟩⟩ ≡  ¯1‿1 Partition ¯3+↕7
+# "Partition spec1" ! ⟨"A","BC","D","E"⟩  ≡ "x,z" Partition "xA,BCzzDx,zEx"
+# "Partition spec2" ! ⟨"AB","C","DE"⟩     ≡   " " Partition "AB C  DE"
+# "Partition spec3" ! ⟨⟨¯3,¯2⟩,⟨0⟩,⟨2,3⟩⟩ ≡  ¯1‿1 Partition ¯3+↕7
 
 #
 # string operations
@@ -38,10 +38,11 @@ StartsWith  ← ⊢≡↑˜⟜≠
 ParseFloats ← •ParseFloat¨·(∨´"0123456789"⊸∊)¨⊸/"0123456789.-"⊸((⊢-˜¬×·+`»⊸<)∘(¬∊)˜⊔⊢)
 ParseInts   ← ⌊∘•ParseFloat¨·(∨´"0123456789"⊸∊)¨⊸/"0123456789-"⊸((⊢-˜¬×·+`»⊸<)∘(¬∊)˜⊔⊢)
 ParseInt    ← ⊑ParseInts
-Tokenize    ← {
-    F 𝕩 : (' '≠𝕩)(¬-˜⊢×·+`»⊸>)⊸⊔𝕩 ;
-  𝕨 F 𝕩 : (𝕨≠𝕩)(¬-˜⊢×·+`»⊸>)⊸⊔𝕩
-}
+
+Tokenize ← {" " 𝕊 𝕩 ; (𝕩¬∘∊𝕨)(¬-˜⊢×·+`»⊸>)⊸⊔𝕩}
+# "Tokenize spec1" ! ⟨"A","B,C,","D"⟩  ≡  " "Tokenize"A B,C, D"
+# "Tokenize spec2" ! ⟨"A","B","C","D"⟩ ≡ " ,"Tokenize"A B,C, D"
+
 color ← {
   # https://en.wikipedia.org/wiki/ANSI_escape_code
   esc     ⇐ @+27
@@ -118,4 +119,4 @@ MinAt ← {n F l : {𝕨<○(n⊸⊑)𝕩 ? 𝕨 ; 𝕩}´l}
 #
 AbsolutePath ← {'/'=⊑𝕩 ? 𝕩 ; •wdpath∾"/"∾𝕩}
 DataFile ← AbsolutePath∘{0<≠𝕩 ? ⊑𝕩 ; 𝕨}
-version ← "0.6.0"
+version ← "0.6.1"
