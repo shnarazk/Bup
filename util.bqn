@@ -68,6 +68,7 @@ color ← {
 }
 term ← {
   # https://en.wikipedia.org/wiki/ANSI_escape_code
+  lf ⇐ @ + 10
   cr ⇐ @ + 13
   esc ⇐ @ + 27
   csi ⇐ esc∾"["
@@ -111,6 +112,7 @@ Debug ← {
 # math functions
 #
 # This does not work with depth≥2
+# TODO: as ⊑∧⌾(𝕨⊏)¨
 MaxAt ← {n F l : {𝕨>○(n⊸⊑)𝕩 ? 𝕨 ; 𝕩}´l}
 MinAt ← {n F l : {𝕨<○(n⊸⊑)𝕩 ? 𝕨 ; 𝕩}´l}
 
