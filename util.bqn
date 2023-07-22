@@ -122,10 +122,11 @@ MinAt ← {n F l : {𝕨<○(n⊸⊑)𝕩 ? 𝕨 ; 𝕩}´l}
 AbsolutePath ← {'/'=⊑𝕩 ? 𝕩 ; •wdpath∾"/"∾𝕩}
 DataFile ← AbsolutePath∘{0<≠𝕩 ? ⊑𝕩 ; 𝕨}
 
-env ← {
-  vars ⇐ ⥊⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env"
-  Map ⇐ {(𝕩≠⊸⥊@)𝕊𝕩 ; 𝕨{d 𝕊 ⟨k‿v⟩: v ; d 𝕊 s: d}¨(</⟜vars˜)˘𝕩{≡⟜⊑}⌜vars}
+env←{
+  vars ⇐ ⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env"
+  Var ⇐ {⊐⟜𝕩⊸⊏⟜(∾⟜@)˝vars}
+  Map ⇐ {@≡𝕩 ? 𝕨 ; 𝕩}¨⟜Var
 }
-# "env.Map can take defaults" ! "..." ≡ "..." ∾∘env.Map○⋈ "BQN_LIB_NOT_DEFINED"
+# "env.Map takes defaults" ! ".∞." ≡ ".∞."∾∘env.Map○⋈"NOT_DEFINED_"
 
-version ← "0.6.2"
+version ← "0.6.3"
