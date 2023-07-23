@@ -1,7 +1,8 @@
 ⟨
   If,IfElse,_doWhile_,Match,Select,Switch,Test,
   Swap,
-  Tokenize,StartsWith,ParseInt,ParseInts,ParseFloats,color,term,Debug,
+  Tokenize,StartsWith,ParseInt,ParseInts,ParseFloats,color,term,
+  Debug,Progress,
   MaxAt,MinAt,
   AbsolutePath,DataFile,
   version
@@ -40,8 +41,8 @@ ParseInts   ← ⌊∘•ParseFloat¨·(∨´"0123456789"⊸∊)¨⊸/"012345678
 ParseInt    ← ⊑ParseInts
 
 Tokenize ← {" " 𝕊 𝕩 ; (𝕩¬∘∊𝕨)(¬-˜⊢×·+`»⊸>)⊸⊔𝕩}
-# "Tokenize spec1" ! ⟨"A","B,C,","D"⟩  ≡  " "Tokenize"A B,C, D"
-# "Tokenize spec2" ! ⟨"A","B","C","D"⟩ ≡ " ,"Tokenize"A B,C, D"
+# "Tokenize spec1" ! ⟨"A","B,C,","D"⟩  ≡  " " Tokenize "A B,C, D"
+# "Tokenize spec2" ! ⟨"A","B","C","D"⟩ ≡ " ," Tokenize "A B,C, D"
 
 color ← {
   # https://en.wikipedia.org/wiki/ANSI_escape_code
@@ -104,7 +105,18 @@ Debug ← {
    𝕨 𝕊 𝕩 :
     label ← (220‿220‿220 color.RGB 180‿80‿80)
     text  ← color.RGB 20‿100‿200
-    label term.Outln" - "∾𝕨∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾text color.Fmt 𝕩
+    label term.Outln " - "∾𝕨∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾text color.Fmt 𝕩
+    𝕩
+}
+
+Progress ← {
+     𝕊 𝕩 : "progress" 𝕊 𝕩 ;
+  ⟨⟩ 𝕊 𝕩 : 𝕩 ;
+   𝕨 𝕊 𝕩 :
+    label ← (220‿220‿220 color.RGB 180‿80‿80)
+    text  ← color.RGB 20‿100‿200
+    label term.OutLn 𝕨∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾text color.Fmt 𝕩
+    term.Out term.csi∾"1A"∾term.clear
     𝕩
 }
 
@@ -131,4 +143,4 @@ env←{
 # "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEFINED"
 # "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEFINED_1"‿"NOT_DEFINED_2"
 
-version ← "0.6.4"
+version ← "0.7.0"
