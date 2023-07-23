@@ -124,9 +124,11 @@ DataFile ← AbsolutePath∘{0<≠𝕩 ? ⊑𝕩 ; 𝕨}
 
 env←{
   vars ⇐ ⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env"
-  Var ⇐ {⊐⟜𝕩⊸⊏⟜(∾⟜@)˝vars}
-  Map ⇐ {@≡𝕩 ? 𝕨 ; 𝕩}¨⟜Var
+  Var ⇐ {⊐⟜𝕩⊸⊏⟜(∾⟜𝕨)˝vars}
+  Map ⇐ {@≡𝕩 ? 𝕨 ; 𝕩}¨⟜(@⊸Var)
 }
-# "env.Map takes defaults" ! ".∞." ≡ ".∞."∾∘env.Map○⋈"NOT_DEFINED_"
+# "env.Var takes default"  ! ".∞."    ≡ ".∞."      env.Var⌾⋈ "NOT_DEFINED"
+# "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEFINED"
+# "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEFINED_1"‿"NOT_DEFINED_2"
 
-version ← "0.6.3"
+version ← "0.6.4"
