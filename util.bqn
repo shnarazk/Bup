@@ -110,13 +110,20 @@ Debug ← {
 }
 
 Progress ← {
-     𝕊 𝕩 : "progress" 𝕊 𝕩 ;
+   𝕊 𝕩 :
+    textc ← color.RGB 20‿100‿200
+    len ← +´term.lf= text ← •Fmt 𝕩
+    textc term.OutLn text
+    term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear
+    𝕩
+  ;
   ⟨⟩ 𝕊 𝕩 : 𝕩 ;
    𝕨 𝕊 𝕩 :
     label ← (220‿220‿220 color.RGB 180‿80‿80)
-    text  ← color.RGB 20‿100‿200
-    label term.OutLn 𝕨∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾text color.Fmt 𝕩
-    term.Out term.csi∾"1A"∾term.clear
+    textc ← color.RGB 20‿100‿200
+    len ← +´term.lf= text ← •Fmt 𝕩
+    label term.OutLn 𝕨∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾textc color.Out text
+    term.Out term.csi∾(•Fmt len)∾"A"∾term.clear
     𝕩
 }
 
@@ -136,11 +143,11 @@ DataFile ← AbsolutePath∘{0<≠𝕩 ? ⊑𝕩 ; 𝕨}
 
 env←{
   vars ⇐ ⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env"
-  Var ⇐ {⊐⟜𝕩⊸⊏⟜(∾⟜𝕨)˝vars}
+  Var ⇐ {@𝕊𝕩 ; ⊐⟜𝕩⊸⊏⟜(∾⟜𝕨)˝vars}
   Map ⇐ {@≡𝕩 ? 𝕨 ; 𝕩}¨⟜(@⊸Var)
 }
-# "env.Var takes default"  ! ".∞."    ≡ ".∞."      env.Var⌾⋈ "NOT_DEFINED"
-# "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEFINED"
-# "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEFINED_1"‿"NOT_DEFINED_2"
+# "env.Var takes default"  ! ".∞."    ≡ ".∞."      env.Var⌾⋈ "NOT_DEF"
+# "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEF"
+# "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEF1"‿"NOT_DEF2"
 
-version ← "0.7.0"
+version ← "0.7.1"
