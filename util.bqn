@@ -112,7 +112,7 @@ Debug ← {
 Progress ← {
    𝕊 𝕩 :
     textc ← color.RGB 20‿100‿200
-    len ← +´term.lf= text ← •Fmt 𝕩
+    len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Fmt 𝕩}𝕩
     textc term.OutLn text
     term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear
     𝕩
@@ -121,7 +121,7 @@ Progress ← {
    𝕨 𝕊 𝕩 :
     label ← (220‿220‿220 color.RGB 180‿80‿80)
     textc ← color.RGB 20‿100‿200
-    len ← +´term.lf= text ← •Fmt 𝕩
+    len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Fmt 𝕩}𝕩
     label term.OutLn 𝕨∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾textc color.Out text
     term.Out term.csi∾(•Fmt len)∾"A"∾term.clear
     𝕩
