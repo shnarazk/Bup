@@ -110,20 +110,26 @@ Debug ← {
 }
 
 Progress ← {
-   𝕊 𝕩 :
+  𝕊 𝕩      :
     textc ← color.RGB 20‿100‿200
     len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Fmt 𝕩}𝕩
     textc term.OutLn text
     term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear
-    𝕩
-  ;
-  ⟨⟩ 𝕊 𝕩 : 𝕩 ;
-   𝕨 𝕊 𝕩 :
+    𝕩 ;
+  ⟨⟩ 𝕊 𝕩   : 𝕩 ;
+  spec 𝕊 𝕩 :
     label ← (220‿220‿220 color.RGB 180‿80‿80)
     textc ← color.RGB 20‿100‿200
     len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Fmt 𝕩}𝕩
-    label term.OutLn 𝕨∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾textc color.Out text
-    term.Out term.csi∾(•Fmt len)∾"A"∾term.clear
+    {
+      1=•Type spec ?
+        {0<spec ? •Delay spec ; @}
+        textc term.OutLn text ;
+      1==spec ? ∧´(2=•Type)¨spec ?
+        label term.OutLn spec∾":"∾(' '˙¨↕8-8|5+≠spec)∾textc color.Out text ;
+      "invalid 𝕨 for Progress"!0
+    }
+    term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear
     𝕩
 }
 
@@ -150,4 +156,4 @@ env←{
 # "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEF"
 # "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEF1"‿"NOT_DEF2"
 
-version ← "0.7.1"
+version ← "0.7.2"
