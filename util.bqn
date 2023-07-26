@@ -123,8 +123,8 @@ Progress ← {
     len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Fmt 𝕩}𝕩
     {
       1=•Type spec ?
-        {0<spec ? •Delay spec ; @}
-        textc term.OutLn text ;
+        textc term.OutLn text
+        {0<spec ? •Delay spec ; @} ;
       1==spec ? ∧´(2=•Type)¨spec ?
         label term.OutLn spec∾":"∾(' '˙¨↕8-8|5+≠spec)∾textc color.Out text ;
       "invalid 𝕨 for Progress"!0
