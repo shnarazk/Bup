@@ -19,7 +19,7 @@
 }
 
 HashSet ⇐ {𝕩.Self𝕩}∘{ 𝕊 keys: Self⇐{self↩𝕩}
-  "HashSet: keys 𝕨 must be arrays" ! 0=•Type keys
+  "HashSet: keys 𝕩 must be arrays" ! 0=•Type keys
   vals ← 1¨keys
   keys‿vals ⥊¨↩
   hlen←bits←table←0 ⋄ Ind←Next←⊢
