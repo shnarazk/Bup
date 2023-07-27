@@ -7,7 +7,7 @@ BQN utility package
 ```apl
 #!/usr/bin/env cbqn
 env←{v⇐⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env"⋄Var⇐{⊐⟜𝕩⊸⊏⟜(∾⟜@)˝v}}
-lib ← •Import"/util.bqn"∾˜∾env.Var<"BQN_LIB"
+lib ← •Import"/util.bqn"∾˜∾env.Var⌾⋈"BQN_LIB"
 
 ...
 
