@@ -109,6 +109,10 @@ Debug ← {
     𝕩
 }
 
+# 𝕨 should be a number
+# - 0 for stop displaying
+# - n for displaying 𝕩 for n mili sec.
+# - ∞ for displaying without overwriting
 Progress ← {
   𝕊 𝕩      :
     textc ← color.RGB 20‿100‿200
@@ -116,7 +120,7 @@ Progress ← {
     textc term.OutLn text
     term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear
     𝕩 ;
-  ⟨⟩ 𝕊 𝕩   : 𝕩 ;
+  0 𝕊 𝕩    : 𝕩 ;
   spec 𝕊 𝕩 :
     label ← (220‿220‿220 color.RGB 180‿80‿80)
     textc ← color.RGB 20‿100‿200
@@ -124,12 +128,12 @@ Progress ← {
     {
       1=•Type spec ?
         textc term.OutLn text
-        {0<spec ? •Delay spec ; @} ;
+        {0<spec ? ∞>spec ? •Delay spec ; @} ;
       1==spec ? ∧´(2=•Type)¨spec ?
         label term.OutLn spec∾":"∾(' '˙¨↕8-8|5+≠spec)∾textc color.Out text ;
       "invalid 𝕨 for Progress"!0
     }
-    term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear
+    {∞>spec ? term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear ; @}
     𝕩
 }
 
