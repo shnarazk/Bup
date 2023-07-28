@@ -110,17 +110,20 @@ Debug ← {
 }
 
 # 𝕨 should be a number
-# - 0 for stop displaying
+# - 0 for displaying without pause
+# - ⟨⟩ or @ for returning 𝕩 without display
 # - n for displaying 𝕩 for n mili sec.
 # - ∞ for displaying without overwriting
 Progress ← {
-  𝕊 𝕩      :
+  𝕊 𝕩      : 0 𝕊 𝕩 ;
+  0 𝕊 𝕩    :
     textc ← color.RGB 20‿100‿200
     len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Fmt 𝕩}𝕩
     textc term.OutLn text
     term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear
     𝕩 ;
-  0 𝕊 𝕩    : 𝕩 ;
+  @ 𝕊 𝕩    : 𝕩 ;
+  ⟨⟩ 𝕊 𝕩   : 𝕩 ;
   spec 𝕊 𝕩 :
     label ← (220‿220‿220 color.RGB 180‿80‿80)
     textc ← color.RGB 20‿100‿200
@@ -160,4 +163,4 @@ env←{
 # "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEF"
 # "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEF1"‿"NOT_DEF2"
 
-version ← "0.7.2"
+version ← "0.7.3"
