@@ -1,10 +1,11 @@
 ⟨
-  If,IfElse,_doWhile_,Match,Select,Switch,Test,
-  Swap,
-  Tokenize,StartsWith,ParseInt,ParseInts,ParseFloats,color,term,
-  Debug,Progress,
-  MaxAt,MinAt,
-  AbsolutePath,DataFile,
+  If,IfElse,_doWhile_,Match,Select,Switch,Test
+  Swap
+  StartsWith,ParseInt,ParseInts,ParseFloats,Tokenize,LeftFill,ValidYear
+  color,term
+  Debug,Progress
+  MaxAt,MinAt
+  AbsolutePath,DataFile,ExistsOrExit
   version
 ⟩ ⇐
 
@@ -43,6 +44,22 @@ ParseInt    ← ⊑ParseInts
 Tokenize ← {" " 𝕊 𝕩 ; (𝕩¬∘∊𝕨)(¬-˜⊢×·+`»⊸>)⊸⊔𝕩}
 # "Tokenize spec1" ! ⟨"A","B,C,","D"⟩  ≡  " " Tokenize "A B,C, D"
 # "Tokenize spec2" ! ⟨"A","B","C","D"⟩ ≡ " ," Tokenize "A B,C, D"
+
+LeftFill ← {template 𝕊 value : value∾˜(0⌈template-○≠value)↑template}
+# "LeftFill spec1" !  "   1" ≡ "    " LeftFill "1"
+# "LeftFill spec2" !  "..10" ≡ "...." LeftFill "10"
+# "LeftFill spec3" !  "1000" ≡ "    " LeftFill "1000"
+# "LeftFill spec4" ! "10000" ≡ "    " LeftFill "10000"
+
+ValidYear ← {¯∞ 𝕊 𝕩 ; 𝕨≤•Parsefloat⎊¯∞ 𝕩}
+# "ValidYear spec1" ! ValidYear "2022"
+# "ValidYear spec2" ! ValidYear "1985"
+# "ValidYear spec3" ! ValidYear "¯∞"
+# "ValidYear spec4" ! ValidYear "-∞"
+# "ValidYear with start year1" ! 2020 ValidYear "2020"
+# "ValidYear with start year2" ! 2020 ¬∘ValidYear "2019"
+# "ValidYear with start year3" ! 2020 ValidYear "2023"
+# "ValidYear with start year4" ! 0 ¬∘ValidYear "¯∞"
 
 color ← {
   # https://en.wikipedia.org/wiki/ANSI_escape_code
@@ -153,6 +170,12 @@ MinAt ← {n F l : {𝕨<○(n⊸⊑)𝕩 ? 𝕨 ; 𝕩}´l}
 #
 AbsolutePath ← {'/'=⊑𝕩 ? 𝕩 ; •wdpath∾"/"∾𝕩}
 DataFile ← AbsolutePath∘{0<≠𝕩 ? ⊑𝕩 ; 𝕨}
+ExistsOrExit ← {
+   𝕊𝕩: 1 𝕊 𝕩 ;
+  𝕨𝕊𝕩: ¬•file.Exists 𝕩 ? color.red term.Outln 𝕩∾" doesn't exist." ⋄ •Exit 𝕨 ; 𝕩
+}
+# "ExistsOrExit" ! "util.bqn" ≡ ExistsOrExit "util.bqn"
+# ExistsOrExit "nofile"
 
 env←{
   vars ⇐ ⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env"
@@ -163,4 +186,4 @@ env←{
 # "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEF"
 # "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEF1"‿"NOT_DEF2"
 
-version ← "0.7.3"
+version ← "0.8.0"
