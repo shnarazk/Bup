@@ -20,8 +20,7 @@
 
 HashSet ⇐ {𝕩.Self𝕩}∘{ 𝕊 keys: Self⇐{self↩𝕩}
   "HashSet: keys 𝕩 must be arrays" ! 0=•Type keys
-  vals ← 1¨keys
-  keys‿vals ⥊¨↩
+  keys ⥊↩
   hlen←bits←table←0 ⋄ Ind←Next←⊢
   InitSize ← {
     hlen ↩ 2 ⋆ bits ↩ 1+⌈2⋆⁼ 1⌈𝕩  # hlen ≥ 2×len
@@ -53,12 +52,12 @@ HashSet ⇐ {𝕩.Self𝕩}∘{ 𝕊 keys: Self⇐{self↩𝕩}
     i ← Next•_while_(¯1⊸≠◶⟨0,key≢⊑⟜keys⟩ ⊑⟜table) Ind key
     t ← i⊑table
     {
-      ¯1≠t ? vals 1˙⌾(t⊸⊑)↩ ; # Modify
-      len ST i ⋄ keys∾↩<key ⋄ vals∾↩<1 ⋄ IncLen 1
+      len ST i ⋄ keys∾↩<key ⋄ IncLen 1
     }
     self
   }
   AsList ⇐ {𝕊 : keys}
+  Values ⇐ {𝕊 : 1 ; 𝕊⁼ : tombstone⊸≢¨⊸/keys ; 𝕨𝕊⁼𝕩 : 1⋈˜¨tombstone⊸≢¨⊸/keys}
   Copy ⇐ {𝕊 : HashSet keys}
 
   # Resize
@@ -69,7 +68,7 @@ HashSet ⇐ {𝕩.Self𝕩}∘{ 𝕊 keys: Self⇐{self↩𝕩}
   ClearTombs ← {𝕊:
     len ≡ ≠keys ? @ ;
     ! len ≡ +´ k ← tombstone⊸≢¨ keys
-    keys‿vals k⊸/¨↩
+    keys k⊸/↩
     k
   }
   Renumber ← { # Based on filter 𝕩
