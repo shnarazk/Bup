@@ -51,11 +51,12 @@ LeftFill ← {template 𝕊 value : value∾˜(0⌈template-○≠value)↑templ
 # "LeftFill spec3" !  "1000" ≡ "    " LeftFill "1000"
 # "LeftFill spec4" ! "10000" ≡ "    " LeftFill "10000"
 
-ValidYear ← {¯∞ 𝕊 𝕩 ; 𝕨≤•Parsefloat⎊¯∞ 𝕩}
-# "ValidYear spec1" ! ValidYear "2022"
-# "ValidYear spec2" ! ValidYear "1985"
-# "ValidYear spec3" ! ValidYear "¯∞"
-# "ValidYear spec4" ! ValidYear "-∞"
+ValidYear ← {¯∞ 𝕊 𝕩 ; (𝕨≤•Parsefloat)⎊0 𝕩}
+# "ValidYear spec1" !¬ValidYear "aoc"
+# "ValidYear spec2" ! ValidYear "2022"
+# "ValidYear spec3" ! ValidYear "1985"
+# "ValidYear spec4" !¬ValidYear "¯∞" # This is an invalid input for •Parsefloat
+# "ValidYear spec5" !¬ValidYear "-∞"
 # "ValidYear with start year1" ! 2020 ValidYear "2020"
 # "ValidYear with start year2" ! 2020 ¬∘ValidYear "2019"
 # "ValidYear with start year3" ! 2020 ValidYear "2023"
