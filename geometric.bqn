@@ -5,7 +5,7 @@
 ⟩ ⇐
 
 dir5 ← ⟨0‿0,1‿0,¯1‿0,0‿1,0‿¯1⟩
-dir9 ← (¯1+↕3‿3)
+dir9 ← ¯1+⥊↕3‿3
 
 # Extend a 2D matrix with 1-width borders which are ∞
 #    geo ← •Import "geometric.bqn"
