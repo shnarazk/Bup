@@ -1,6 +1,6 @@
 ⟨
   dir5, dir9
-  Ext,Shift,Rotate,Gather5,Gather9
+  Ext,Shift,Rotate,Neighbor5,Neighbor9
   version
 ⟩ ⇐
 
@@ -105,7 +105,7 @@ Shift  ← {
 #                  ┘
 Rotate ← {y‿x 𝕊 a : >{y⊸⌽⎉1⌾⍉x⊸⌽⎉1 𝕩}¨<a}
 
-# Gather self and four neighbars as a list and invalid neighbars are prsented by 'fill'
+# Neighbor self and four neighbars as a list and invalid neighbars are prsented by 'fill'
 # they are ordered as self up down left right
 #    geo ← •Import "geometric.bqn"
 # {dir5‿dir9‿ext‿shift‿gather5‿gather9‿version⇐}
@@ -115,18 +115,18 @@ Rotate ← {y‿x 𝕊 a : >{y⊸⌽⎉1⌾⍉x⊸⌽⎉1 𝕩}¨<a}
 #   3 4 5
 #   6 7 8
 #         ┘
-#    ∞ geo.Gather5 m
+#    ∞ geo.Neighbor5 m
 # ┌─
 # ╵ ⟨ 0 ∞ 3 ∞ 1 ⟩ ⟨ 1 ∞ 4 0 2 ⟩ ⟨ 2 ∞ 5 1 ∞ ⟩
 #   ⟨ 3 0 6 ∞ 4 ⟩ ⟨ 4 1 7 3 5 ⟩ ⟨ 5 2 8 4 ∞ ⟩
 #   ⟨ 6 3 ∞ ∞ 7 ⟩ ⟨ 7 4 ∞ 6 8 ⟩ ⟨ 8 5 ∞ 7 ∞ ⟩
 #                                             ┘
-Gather5 ← {
+Neighbor5 ← {
     𝕊 m : {∾¨´dir5 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩} m ;
   f 𝕊 m : {∾¨´dir5 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩} m
 }
 
-# Gather self and eight neighbars as a list and invalid neighbars are prsented by 'fill'
+# Neighbor self and eight neighbars as a list and invalid neighbars are prsented by 'fill'
 # they are ordered as ¯1+⥊↕3‿3. So the center is the 5th item.
 #    g ← •Import "geometry.bqn"
 # {dir5‿dir9‿ext‿shift‿rotate‿gather5‿gather9‿version⇐}
@@ -136,15 +136,15 @@ Gather5 ← {
 #   3 4 5
 #   6 7 8
 #         ┘
-#    ∞ g.Gather9 m
+#    ∞ g.Neighbor9 m
 # ┌─
 # ╵ ⟨ ∞ ∞ ∞ ∞ 0 1 ∞ 3 4 ⟩ ⟨ ∞ ∞ ∞ 0 1 2 3 4 5 ⟩ ⟨ ∞ ∞ ∞ 1 2 ∞ 4 5 ∞ ⟩
 #   ⟨ ∞ 0 1 ∞ 3 4 ∞ 6 7 ⟩ ⟨ 0 1 2 3 4 5 6 7 8 ⟩ ⟨ 1 2 ∞ 4 5 ∞ 7 8 ∞ ⟩
 #   ⟨ ∞ 3 4 ∞ 6 7 ∞ ∞ ∞ ⟩ ⟨ 3 4 5 6 7 8 ∞ ∞ ∞ ⟩ ⟨ 4 5 ∞ 7 8 ∞ ∞ ∞ ∞ ⟩
 #                                                                     ┘
-Gather9 ← {
+Neighbor9 ← {
     𝕊 m : {∾¨´dir9 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩}m ;
   f 𝕊 m : {∾¨´dir9 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩}m
 }
 
-version ⇐ "0.3.0"
+version ⇐ "0.4.0"
