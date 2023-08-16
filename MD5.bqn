@@ -44,10 +44,96 @@ Md5 ← {
     t ← block # TODO
     word_block ← ∘‿32⥊block
     aa‿bb‿cc‿dd ← a‿b‿c‿d
+
     Op1 ← {k‿s‿i‿b‿c‿d 𝕊 a : b+(«⍟s)a+(F b‿c‿d)+(k⊑word_block)+(i⊑t)}
+    a b‿c‿d‿00‿07‿01⊸Op1 ↩
+    d a‿b‿c‿01‿12‿02⊸Op1 ↩
+    c d‿a‿b‿02‿17‿03⊸Op1 ↩
+    b c‿d‿a‿03‿22‿04⊸Op1 ↩
+
+    a b‿c‿d‿04‿07‿05⊸Op1 ↩
+    d a‿b‿c‿05‿12‿06⊸Op1 ↩
+    c d‿a‿b‿06‿17‿07⊸Op1 ↩
+    b c‿d‿a‿07‿22‿08⊸Op1 ↩
+
+    a b‿c‿d‿08‿07‿09⊸Op1 ↩
+    d a‿b‿c‿09‿12‿10⊸Op1 ↩
+    c d‿a‿b‿10‿17‿11⊸Op1 ↩
+    b c‿d‿a‿11‿22‿12⊸Op1 ↩
+
+    a b‿c‿d‿12‿07‿13⊸Op1 ↩
+    d a‿b‿c‿13‿12‿14⊸Op1 ↩
+    c d‿a‿b‿14‿17‿15⊸Op1 ↩
+    b c‿d‿a‿15‿22‿16⊸Op1 ↩
+
     Op2 ← {k‿s‿i‿b‿c‿d 𝕊 a : b+(«⍟s)a+(G b‿c‿d)+(k⊑word_block)+(i⊑t)}
+    a b‿c‿d‿01‿05‿17⊸Op2 ↩
+    d a‿b‿c‿06‿09‿18⊸Op2 ↩
+    c d‿a‿b‿11‿14‿19⊸Op2 ↩
+    b c‿d‿a‿00‿20‿20⊸Op2 ↩
+
+    a b‿c‿d‿05‿05‿21⊸Op2 ↩
+    d a‿b‿c‿10‿09‿22⊸Op2 ↩
+    c d‿a‿b‿15‿14‿23⊸Op2 ↩
+    b c‿d‿a‿04‿20‿24⊸Op2 ↩
+
+    a b‿c‿d‿09‿05‿25⊸Op2 ↩
+    d a‿b‿c‿14‿09‿26⊸Op2 ↩
+    c d‿a‿b‿03‿14‿27⊸Op2 ↩
+    b c‿d‿a‿08‿20‿28⊸Op2 ↩
+
+    a b‿c‿d‿13‿05‿29⊸Op2 ↩
+    d a‿b‿c‿02‿09‿30⊸Op2 ↩
+    c d‿a‿b‿07‿14‿31⊸Op2 ↩
+    b c‿d‿a‿12‿20‿32⊸Op2 ↩
+
     Op3 ← {k‿s‿i‿b‿c‿d 𝕊 a : b+(«⍟s)a+(H b‿c‿d)+(k⊑word_block)+(i⊑t)}
+    a b‿c‿d‿05‿04‿33⊸Op3 ↩
+    d a‿b‿c‿08‿11‿34⊸Op3 ↩
+    c d‿a‿b‿11‿16‿35⊸Op3 ↩
+    b c‿d‿a‿14‿23‿36⊸Op3 ↩
+
+    a b‿c‿d‿01‿04‿37⊸Op3 ↩
+    d a‿b‿c‿04‿11‿38⊸Op3 ↩
+    c d‿a‿b‿07‿16‿39⊸Op3 ↩
+    b c‿d‿a‿10‿23‿40⊸Op3 ↩
+
+    a b‿c‿d‿13‿04‿41⊸Op3 ↩
+    d a‿b‿c‿00‿11‿42⊸Op3 ↩
+    c d‿a‿b‿03‿16‿43⊸Op3 ↩
+    b c‿d‿a‿06‿23‿44⊸Op3 ↩
+
+    a b‿c‿d‿09‿04‿45⊸Op3 ↩
+    d a‿b‿c‿12‿11‿46⊸Op3 ↩
+    c d‿a‿b‿15‿16‿47⊸Op3 ↩
+    b c‿d‿a‿02‿23‿48⊸Op3 ↩
+
     Op4 ← {k‿s‿i‿b‿c‿d 𝕊 a : b+(«⍟s)a+(I b‿c‿d)+(k⊑word_block)+(i⊑t)}
+    a b‿c‿d‿00‿06‿49⊸Op4 ↩
+    d a‿b‿c‿07‿10‿50⊸Op4 ↩
+    c d‿a‿b‿14‿15‿51⊸Op4 ↩
+    b c‿d‿a‿05‿21‿52⊸Op4 ↩
+
+    a b‿c‿d‿12‿06‿53⊸Op4 ↩
+    d a‿b‿c‿03‿10‿54⊸Op4 ↩
+    c d‿a‿b‿10‿15‿55⊸Op4 ↩
+    b c‿d‿a‿01‿21‿56⊸Op4 ↩
+
+    a b‿c‿d‿08‿06‿57⊸Op4 ↩
+    d a‿b‿c‿15‿10‿58⊸Op4 ↩
+    c d‿a‿b‿06‿15‿59⊸Op4 ↩
+    b c‿d‿a‿13‿21‿60⊸Op4 ↩
+
+    a b‿c‿d‿04‿06‿61⊸Op4 ↩
+    d a‿b‿c‿11‿10‿62⊸Op4 ↩
+    c d‿a‿b‿02‿15‿63⊸Op4 ↩
+    b c‿d‿a‿09‿21‿64⊸Op4 ↩
+
+    a aa⊸⟨32,32⟩•bit._add ↩
+    b bb⊸⟨32,32⟩•bit._add ↩
+    c cc⊸⟨32,32⟩•bit._add ↩
+    d dd⊸⟨32,32⟩•bit._add ↩
+
     a‿b‿c‿d
   }´∘‿512⥊msg
   0
