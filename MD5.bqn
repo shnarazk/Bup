@@ -5,14 +5,7 @@ util ← •Import "/util.bqn"∾˜"." env.Var⌾⋈ "BQN_LIB"
 
 Encode8 ← {⟨8‿'u',1‿'u'⟩•bit._cast 𝕩}
 Encode32 ← {∾⌽(⌽∘(8⊸↑)∘(⟨16‿'u',1‿'u'⟩•bit._cast)∘⋈)¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
-# Encode32 ← {∾⌽(¯4⊸↓∘(⟨8‿'u',1‿'u'⟩•bit._cast)∘⋈)¨"0123456789ABCDEF"⊐𝕩}
-# "# encode32 8FFF0000" util.Debug Encode32 "8FFF0000"
-ToString ← {
-  ⥊((⊑⟜"0123456789abcdef"¨·•Show·16⊸(⌊∘(÷˜)⋈|)·•Show·{𝕨+2×𝕩}´·⌽·•Show>)˘·⌽·⥊·<˘∘‿8⊸⥊)𝕩
-  # ((⊑⟜"0123456789abcdef"{𝕨+2×𝕩}´)˘·⌽∘‿4⊸⥊)𝕩
-  # ∾((⊑⟜"0123456789abcdef"·{𝕨+2×𝕩}´⌽)˘∘‿4⊸⥊)𝕩
-  # ⊑⟜"0123456789abcdef"¨∾((16⊸(⌊÷˜))⋈(16⊸|))¨256|256+∾⟨1‿'u',8‿'u'⟩•bit._cast¨𝕩
-}
+ToString ← {⥊((⊑⟜"0123456789abcdef"¨·16⊸(⌊∘(÷˜)⋈|)·{𝕨+2×𝕩}´·⌽>)˘·⌽·⥊·<˘∘‿8⊸⥊)𝕩}
 "ToString encode32 D76AA478" util.Debug ToString Encode32 "D76AA478"
 t ← Encode32¨⟨
   "00000000"
@@ -35,38 +28,15 @@ t ← Encode32¨⟨
 ⟩
 "# ToString encode32 8FFF0000" util.Debug ToString Encode32 "8FFF0000"
 a‿b‿c‿d ← Encode32¨⟨"67452301","EFCDAB89","98BADCFE","10325476"⟩
-P32 ← {
-  𝕊 𝕩 : {𝕨+2×𝕩}´∘⌽˘(∘‿8⊸⥊)𝕩 ; # ⌽⎉1⌾
-  # 𝕊 𝕩 : (2⋆8)|(2⋆8)+⟨1,8‿'u'⟩•bit._cast ⌽⎉1⌾(∘‿4⊸⥊)𝕩 ;
-  # 𝕊⁼𝕩 : ∾⌽<˘∘‿8⥊𝕩 
-  𝕊⁼𝕩 : ∾(8↑(16‿1•bit._cast)∘⋈)¨⌽𝕩
-  # 𝕊⁼𝕩 : ∾(8↑(16‿1•bit._cast)∘⋈)¨𝕩
-}
-ToBytes ← {
-  𝕊 𝕩 : <∾⌽<˘∘‿8⥊𝕩
-}
-{
-  m ← ⟨
-    1,0,0,0,1,1,0,0
-    1,1,1,0,1,1,1,1
-  ⟩
-  # "m" util.Debug m
-  # "P32 m" util.Debug P32 m
-  # "P32⁼m" util.Debug P32⁼P32 m
-  # !m≡P32⁼P32 m
-}
-Value32 ← {
-  ∾((1‿16•bit._cast)∘•Show∘(16⊸↑))¨⌽⥊<˘∘‿8⥊𝕩
-}
+P32 ← {𝕊 𝕩 : {𝕨+2×𝕩}´∘⌽˘(∘‿8⊸⥊)𝕩 ;  𝕊⁼𝕩 : ∾(8↑(16‿1•bit._cast)∘⋈)¨⌽𝕩}
+Value32 ← {∾((1‿16•bit._cast)∘(16⊸↑))¨⌽⥊<˘∘‿8⥊𝕩}
 Md5 ← {
   !∧´(255⊸≥-⟜@)¨message ← 𝕩
-  "bitcount" util.Debug msg_len_bits ← 8×≠𝕩
+  msg_len_bits ← 8×≠𝕩
   msg ← ∾{⌽⟨8‿'u',1‿'u'⟩•bit._cast ⋈𝕩-@}¨𝕩
-  "add 1bit" util.Debug msg ∾⟜⟨1,0,0,0,0,0,0,0⟩ ↩
+  msg ∾⟜⟨1,0,0,0,0,0,0,0⟩ ↩
   msg ↩ {𝕩∾Encode8⋈0}•_while_(448≠512|≠)msg
-  # "add length" util.Debug msg ∾⟜(64↑⟨32‿'u',1‿'u'⟩•bit._cast⋈msg_len_bits) ↩
-  "8|count" util.Debug 2⊑{c‿v‿l : ⟨-¬c,v⌊∘÷256,l∾˜256|v⟩}•_while_(0<⊑)8‿msg_len_bits‿⟨⟩
-  "add length" util.Debug msg ↩ msg{
+  msg ↩ msg{
     𝕩∾⌽8↑⟨16,1‿'u'⟩•bit._cast⋈𝕨
   }´2⊑{c‿v‿l : ⟨-¬c,v⌊∘÷256,l∾˜256|v⟩}•_while_(0<⊑)8‿msg_len_bits‿⟨⟩
   (≠msg)!0≡512|≠msg
@@ -76,33 +46,18 @@ Md5 ← {
   J ← {x‿y‿z : y 1‿1 •bit._xor (x 1‿1 •bit._or (1‿1 •bit._not z))}
   modulo ← 2⋆8
   Add32 ← {
-    "# P32 𝕨" util.Debug P32 𝕨
-    "# P32 𝕩" util.Debug P32 𝕩
-    "# pairs" util.Debug pairs ← <˘⍉>P32¨𝕨‿𝕩
-    ⊑⟨⟩‿0{w‿x 𝕊 res‿c : val ← c+w+x ⋄ ⟨res∾⌽8↑⟨16‿'u',1‿'u'⟩•bit._cast⊑•Show⟨⋈modulo|val,c,w,x,val,9↑⟨16‿'u',1‿'u'⟩•bit._cast⋈modulo|val⟩,modulo≤val⟩}´⌽pairs 
-    # ⊑⟨⟩‿0{w‿x 𝕊 res‿c : val ← c+w+x ⋄ ⟨res∾˜8↑•Show⟨16‿'u',1‿'u'⟩•bit._cast⊑•Show⟨⋈modulo|val,c,w,x,val⟩,modulo≤val⟩}´pairs 
+    pairs ← <˘⍉>P32¨𝕨‿𝕩
+    ⊑⟨⟩‿0{w‿x 𝕊 res‿c : val ← c+w+x ⋄ ⟨res∾⌽8↑⟨16‿'u',1‿'u'⟩•bit._cast⋈modulo|val,modulo≤val⟩}´⌽pairs
   }
-  Add32s ← {𝕨 ⟨32,1⟩•bit._add 𝕩}
-  # Add32 ← {⟨32,1⟩•bit._cast 𝕨+○(⟨1,32‿'u'⟩•bit._cast)𝕩}
   abcd ← a‿b‿c‿d{block 𝕊 a‿b‿c‿d :
-    "block" util.Debug ><˘∘‿32⥊block
     "word_block" util.Debug >word_block ← ⥊<˘∘‿32⥊block
-    # "word_block" util.Debug >word_block ← ToBytes˘∘‿32⥊block
-    "value⊑word_block" util.Debug Value32 ⊑word_block
-    # "new word_block" util.Debug word_block ← (<⌽⌾P32)˘∘‿32⥊block
-    # "new word_block" util.Debug word_block ← (<·⥊·⌽4‿8⊸⥊)˘∘‿32⥊block
     aa‿bb‿cc‿dd ← a‿b‿c‿d
-    "p32" util.Debug >P32¨a‿b 
-    "trans" util.Debug <˘⍉>P32¨a‿b 
-    "a‿b" util.Debug a≍b
-    "a+b" util.Debug a Add32 b
     Op1 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32(s⊸⌽)⌾(∾·⌽·⥊·<˘∘‿8⊸⥊)a Add32(F b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
     "a+f" util.Debug a Add32(F b‿c‿d)
     "ToString a+f" util.Debug ToString a Add32(F b‿c‿d)
 
     "0⊑X" util.Debug (0⊑word_block)
     "ToString 0⊑X" util.Debug ToString(0⊑word_block)
-    # "ToString X" util.Debug ToString⋈•Show⌽⌾P32(0⊑word_block)
     "P32 0⊑X" util.Debug P32(0⊑word_block)
 
     "14⊑X" util.Debug (14⊑word_block)
@@ -113,7 +68,7 @@ Md5 ← {
     "ToString a+f+X" util.Debug ToString tt
     "1⊑t" util.Debug ToString(1⊑t)
     "a+f+X+T" util.Debug ToString a Add32(F b‿c‿d)Add32(0⊑word_block)Add32 1⊑t
-    "rotated" util.Debug ToString(7⊸⌽)⌾(∾·⌽·⥊·<˘∘‿8⊸⥊)•Show a Add32(F b‿c‿d)Add32(0⊑word_block)Add32 1⊑t
+    "rotated" util.Debug ToString(7⊸⌽)⌾(∾·⌽·⥊·<˘∘‿8⊸⥊)a Add32(F b‿c‿d)Add32(0⊑word_block)Add32 1⊑t
     a b‿c‿d‿00‿07‿01⊸Op1 ↩
     ("step1 of "∾message) util.Debug ToString¨ a‿b‿c‿d
     d a‿b‿c‿01‿12‿02⊸Op1 ↩
@@ -141,11 +96,8 @@ Md5 ← {
     "ToString 14⊑X" util.Debug ToString(14⊑word_block)
     "15⊑t" util.Debug ToString 15⊑t
     c d‿a‿b‿14‿17‿15⊸Op1 ↩
-    "ToString C" util.Debug ToString c
-    "C" util.Debug c
     ("stepF of "∾message) util.Debug ToString¨ a‿b‿c‿d
     b c‿d‿a‿15‿22‿16⊸Op1 ↩
-    "B" util.Debug ToString b
     "phase1" util.Debug ToString¨ a‿b‿c‿d
 
     Op2 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 (s⊸⌽)⌾(∾·⌽·⥊·<˘∘‿8⊸⥊)a Add32(G b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
@@ -218,14 +170,11 @@ Md5 ← {
     b bb⊸Add32 ↩
     c cc⊸Add32 ↩
     d dd⊸Add32 ↩
-    "phase5" util.Debug ToString¨ a‿b‿c‿d 
-    "P32" util.Debug P32¨ a‿b‿c‿d
+    "phase5" util.Debug ToString¨ a‿b‿c‿d
 
     ⌽⌾(⥊∘(<˘)∘‿8⊸⥊)¨a‿b‿c‿d
   }´<˘∘‿512⥊msg
 }
 
-# •Show P32¨ k← Md5 ""
-# •Show ToString (⌽⌾P32)¨k
-# •Show ToString (⌽⌾P32)¨Md5 "a"
-•Show ToString¨Md5 ""
+•Show ToString¨Md5 "a"
+# •Show ToString¨Md5 "abcdefghijklmnopqrstuvwxyz"
