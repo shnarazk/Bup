@@ -5,7 +5,6 @@ util ← •Import "/util.bqn"∾˜"." env.Var⌾⋈ "BQN_LIB"
 
 modulo ← 2⋆8
 SwapByteOrder ← ⌽·⥊·<˘∘‿8⊸⥊
-SwapBitOrder ← ⥊·⌽˘∘‿8⊸⥊
 
 Encode32 ← {∾⌽((⟨8‿'i',1‿'u'⟩•bit._cast)∘⋈∘{127<𝕩 ? 𝕩-modulo ; 𝕩})¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
 ToString ← {⥊((⊑⟜"0123456789abcdef"¨·16⊸(⌊∘(÷˜)⋈|)·{𝕨+2×𝕩}´>)˘SwapByteOrder)𝕩}
@@ -41,15 +40,15 @@ Add32 ← 32‿1•bit._add
 ToMd5 ← {
   !∧´(255⊸≥-⟜@)¨message ← 𝕩
   msg_len_bits ← 8×≠𝕩
-  msg ← ∾{⌽⟨8‿'u',1‿'u'⟩•bit._cast ⋈𝕩-@}¨𝕩
-  msg ∾⟜⟨1,0,0,0,0,0,0,0⟩ ↩
+  msg ← ∾{⟨8‿'u',1‿'u'⟩•bit._cast ⋈𝕩-@}¨𝕩
+  msg ∾⟜⟨0,0,0,0,0,0,0,1⟩ ↩
   msg ↩ {𝕩∾8↑0}•_while_(448≠512|≠)msg
   msg ↩ msg{
-    𝕩∾⌽⟨8,1‿'u'⟩•bit._cast⋈{127<𝕩 ? 𝕩-modulo ; 𝕩}𝕨
+    𝕩∾⟨8,1‿'u'⟩•bit._cast⋈{127<𝕩 ? 𝕩-modulo ; 𝕩}𝕨
   }´2⊑{c‿v‿l : ⟨-¬c,v⌊∘÷modulo,l∾˜modulo|v⟩}•_while_(0<⊑)8‿msg_len_bits‿⟨⟩
   (≠msg)!0≡512|≠msg
   abcd ← a‿b‿c‿d{block 𝕊 a‿b‿c‿d :
-    word_block ← ⥊<∘SwapBitOrder˘∘‿32⥊block
+    word_block ← ⥊<˘∘‿32⥊block
     # "0‿14‿15⊑X" util.Debug ToString¨⟨0⊑word_block,14⊑word_block,15⊑word_block⟩
     # "a+f" util.Debug ToString¨⟨a Add32(F b‿c‿d)⟩
     # "a+f+X+T" util.Debug ToString a Add32(F b‿c‿d)Add32(0⊑word_block)Add32 1⊑t
