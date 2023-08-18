@@ -1,15 +1,14 @@
 #!/usr/bin/env cbqn
 env←{v⇐⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env"⋄Var⇐{⊐⟜𝕩⊸⊏⟜(∾⟜𝕨)˝v}}
-# util ← •Import "/util.bqn"∾˜"." env.Var⌾⋈ "BQN_LIB"
+util ← •Import "/util.bqn"∾˜"." env.Var⌾⋈ "BQN_LIB"
 ⟨Md5⟩ ⇐
 
 modulo ← 2⋆8
 SwapByteOrder ← ⌽·⥊·<˘∘‿8⊸⥊
 SwapBitOrder ← ⥊·⌽˘∘‿8⊸⥊
 
-Encode32 ← {∾⌽(⌽∘(⟨8‿'i',1‿'u'⟩•bit._cast)∘⋈∘{127<𝕩 ? 𝕩-modulo ; 𝕩})¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
-# Encode32 ← {∾⌽(⌽∘(8⊸↑)∘(⟨16‿'u',1‿'u'⟩•bit._cast)∘⋈)¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
-ToString ← {⥊((⊑⟜"0123456789abcdef"¨·16⊸(⌊∘(÷˜)⋈|)·{𝕨+2×𝕩}´·⌽>)˘SwapByteOrder)𝕩}
+Encode32 ← {∾⌽((⟨8‿'i',1‿'u'⟩•bit._cast)∘⋈∘{127<𝕩 ? 𝕩-modulo ; 𝕩})¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
+ToString ← {⥊((⊑⟜"0123456789abcdef"¨·16⊸(⌊∘(÷˜)⋈|)·{𝕨+2×𝕩}´>)˘SwapByteOrder)𝕩}
 t ← Encode32¨⟨
   "00000000"
   "D76AA478","E8C7B756","242070DB","C1BDCEEE"
@@ -35,7 +34,7 @@ F ← {x‿y‿z : (x 32‿32 •bit._and y) 32‿32 •bit._or ((32‿32 •bit
 G ← {x‿y‿z : (x 32‿32 •bit._and z) 32‿32 •bit._or (y 32‿32 •bit._and (1‿1 •bit._not z))}
 H ← {x‿y‿z : x 32‿32 •bit._xor y 32‿32 •bit._xor z}
 J ← {x‿y‿z : y 32‿32 •bit._xor (x 32‿32 •bit._or (1‿1 •bit._not z))}
-Add32 ← SwapBitOrder∘(32‿1•bit._add)○SwapBitOrder
+Add32 ← 32‿1•bit._add
 
 ToMd5 ← {
   !∧´(255⊸≥-⟜@)¨message ← 𝕩
@@ -48,30 +47,25 @@ ToMd5 ← {
   }´2⊑{c‿v‿l : ⟨-¬c,v⌊∘÷modulo,l∾˜modulo|v⟩}•_while_(0<⊑)8‿msg_len_bits‿⟨⟩
   (≠msg)!0≡512|≠msg
   abcd ← a‿b‿c‿d{block 𝕊 a‿b‿c‿d :
-    word_block ← ⥊<˘∘‿32⥊block
-    # backup ← a‿b‿c‿d
-    Op1 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼⌾SwapBitOrder a Add32(F b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
+    word_block ← ⥊<∘SwapBitOrder˘∘‿32⥊block
+    Op1 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼ a Add32(F b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
     # "0‿14‿15⊑X" util.Debug ToString¨⟨0⊑word_block,14⊑word_block,15⊑word_block⟩
     # "a+f" util.Debug ToString¨⟨a Add32(F b‿c‿d)⟩
     # "a+f+X+T" util.Debug ToString a Add32(F b‿c‿d)Add32(0⊑word_block)Add32 1⊑t
     a b‿c‿d‿00‿07‿01⊸Op1 ↩
-    # "step1" util.Debug ToString¨ a‿b‿c‿d
     d a‿b‿c‿01‿12‿02⊸Op1 ↩
     c d‿a‿b‿02‿17‿03⊸Op1 ↩
     b c‿d‿a‿03‿22‿04⊸Op1 ↩
-    # "step4" util.Debug ToString¨ a‿b‿c‿d
 
     a b‿c‿d‿04‿07‿05⊸Op1 ↩
     d a‿b‿c‿05‿12‿06⊸Op1 ↩
     c d‿a‿b‿06‿17‿07⊸Op1 ↩
     b c‿d‿a‿07‿22‿08⊸Op1 ↩
-    # "step8" util.Debug ToString¨ a‿b‿c‿d
 
     a b‿c‿d‿08‿07‿09⊸Op1 ↩
     d a‿b‿c‿09‿12‿10⊸Op1 ↩
     c d‿a‿b‿10‿17‿11⊸Op1 ↩
     b c‿d‿a‿11‿22‿12⊸Op1 ↩
-    # "stepC" util.Debug ToString¨ a‿b‿c‿d
 
     a b‿c‿d‿12‿07‿13⊸Op1 ↩
     d a‿b‿c‿13‿12‿14⊸Op1 ↩
@@ -79,7 +73,7 @@ ToMd5 ← {
     b c‿d‿a‿15‿22‿16⊸Op1 ↩
     # "phase1" util.Debug ToString¨ a‿b‿c‿d
 
-    Op2 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼⌾SwapBitOrder a Add32(G b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
+    Op2 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼ a Add32(G b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
     a b‿c‿d‿01‿05‿17⊸Op2 ↩
     d a‿b‿c‿06‿09‿18⊸Op2 ↩
     c d‿a‿b‿11‿14‿19⊸Op2 ↩
@@ -101,7 +95,7 @@ ToMd5 ← {
     b c‿d‿a‿12‿20‿32⊸Op2 ↩
     # "phase2" util.Debug ToString¨ a‿b‿c‿d
 
-    Op3 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼⌾SwapBitOrder a Add32(H b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
+    Op3 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼ a Add32(H b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
     a b‿c‿d‿05‿04‿33⊸Op3 ↩
     d a‿b‿c‿08‿11‿34⊸Op3 ↩
     c d‿a‿b‿11‿16‿35⊸Op3 ↩
@@ -123,7 +117,7 @@ ToMd5 ← {
     b c‿d‿a‿02‿23‿48⊸Op3 ↩
     # "phase3" util.Debug ToString¨ a‿b‿c‿d
 
-    Op4 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼⌾SwapBitOrder a Add32(J b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
+    Op4 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼ a Add32(J b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
     a b‿c‿d‿00‿06‿49⊸Op4 ↩
     d a‿b‿c‿07‿10‿50⊸Op4 ↩
     c d‿a‿b‿14‿15‿51⊸Op4 ↩
