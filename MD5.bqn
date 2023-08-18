@@ -3,9 +3,12 @@ env←{v⇐⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}
 # util ← •Import "/util.bqn"∾˜"." env.Var⌾⋈ "BQN_LIB"
 ⟨Md5⟩ ⇐
 
-Encode8 ← {⟨8‿'u',1‿'u'⟩•bit._cast 𝕩}
-Encode32 ← {∾⌽(⌽∘(8⊸↑)∘(⟨16‿'u',1‿'u'⟩•bit._cast)∘⋈)¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
-ToString ← {⥊((⊑⟜"0123456789abcdef"¨·16⊸(⌊∘(÷˜)⋈|)·{𝕨+2×𝕩}´·⌽>)˘·⌽·⥊·<˘∘‿8⊸⥊)𝕩}
+SwapByteOrder ← ⌽·⥊·<˘∘‿8⊸⥊
+SwapBitOrder ← ⥊·⌽˘∘‿8⊸⥊
+
+Encode32 ← {∾⌽(⌽∘(⟨8‿'i',1‿'u'⟩•bit._cast)∘⋈∘{127<𝕩 ? 𝕩-256 ; 𝕩})¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
+# Encode32 ← {∾⌽(⌽∘(8⊸↑)∘(⟨16‿'u',1‿'u'⟩•bit._cast)∘⋈)¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
+ToString ← {⥊((⊑⟜"0123456789abcdef"¨·16⊸(⌊∘(÷˜)⋈|)·{𝕨+2×𝕩}´·⌽>)˘SwapByteOrder)𝕩}
 t ← Encode32¨⟨
   "00000000"
   "D76AA478","E8C7B756","242070DB","C1BDCEEE"
@@ -27,31 +30,27 @@ t ← Encode32¨⟨
 ⟩
 # "ToString encode32 8FFF0000" util.Debug ToString Encode32 "8FFF0000"
 a‿b‿c‿d ← Encode32¨⟨"67452301","EFCDAB89","98BADCFE","10325476"⟩
-P32 ← {𝕊 𝕩 : {𝕨+2×𝕩}´∘⌽˘(∘‿8⊸⥊)𝕩 ;  𝕊⁼𝕩 : ∾(8↑(16‿1•bit._cast)∘⋈)¨⌽𝕩}
-Value32 ← {∾((1‿16•bit._cast)∘(16⊸↑))¨⌽⥊<˘∘‿8⥊𝕩}
+modulo ← 2⋆8
+F ← {x‿y‿z : (x 32‿32 •bit._and y) 32‿32 •bit._or ((32‿32 •bit._not x) 32‿32 •bit._and z)}
+G ← {x‿y‿z : (x 32‿32 •bit._and z) 32‿32 •bit._or (y 32‿32 •bit._and (1‿1 •bit._not z))}
+H ← {x‿y‿z : x 32‿32 •bit._xor y 32‿32 •bit._xor z}
+J ← {x‿y‿z : y 32‿32 •bit._xor (x 32‿32 •bit._or (1‿1 •bit._not z))}
+Add32 ← SwapBitOrder∘(32‿1•bit._add)○SwapBitOrder
+
 ToMd5 ← {
   !∧´(255⊸≥-⟜@)¨message ← 𝕩
   msg_len_bits ← 8×≠𝕩
   msg ← ∾{⌽⟨8‿'u',1‿'u'⟩•bit._cast ⋈𝕩-@}¨𝕩
   msg ∾⟜⟨1,0,0,0,0,0,0,0⟩ ↩
-  msg ↩ {𝕩∾Encode8⋈0}•_while_(448≠512|≠)msg
+  msg ↩ {𝕩∾8↑0}•_while_(448≠512|≠)msg
   msg ↩ msg{
     𝕩∾⌽8↑⟨16,1‿'u'⟩•bit._cast⋈𝕨
-  }´2⊑{c‿v‿l : ⟨-¬c,v⌊∘÷256,l∾˜256|v⟩}•_while_(0<⊑)8‿msg_len_bits‿⟨⟩
+  }´2⊑{c‿v‿l : ⟨-¬c,v⌊∘÷modulo,l∾˜modulo|v⟩}•_while_(0<⊑)8‿msg_len_bits‿⟨⟩
   (≠msg)!0≡512|≠msg
-  F ← {x‿y‿z : (x 1‿1 •bit._and y) 1‿1 •bit._or ((1‿1 •bit._not x) 1‿1 •bit._and z)}
-  G ← {x‿y‿z : (x 1‿1 •bit._and z) 1‿1 •bit._or (y 1‿1 •bit._and (1‿1 •bit._not z))}
-  H ← {x‿y‿z : x 1‿1 •bit._xor y 1‿1 •bit._xor z}
-  J ← {x‿y‿z : y 1‿1 •bit._xor (x 1‿1 •bit._or (1‿1 •bit._not z))}
-  modulo ← 2⋆8
-  Add32 ← {
-    pairs ← <˘⍉>P32¨𝕨‿𝕩
-    ⊑⟨⟩‿0{w‿x 𝕊 res‿c : val ← c+w+x ⋄ ⟨res∾⌽8↑⟨16‿'u',1‿'u'⟩•bit._cast⋈modulo|val,modulo≤val⟩}´⌽pairs
-  }
   abcd ← a‿b‿c‿d{block 𝕊 a‿b‿c‿d :
     word_block ← ⥊<˘∘‿32⥊block
-    aa‿bb‿cc‿dd ← a‿b‿c‿d
-    Op1 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32(s⊸⌽)⌾(∾·⌽·⥊·<˘∘‿8⊸⥊)a Add32(F b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
+    # backup ← a‿b‿c‿d
+    Op1 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼⌾SwapBitOrder a Add32(F b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
     # "0‿14‿15⊑X" util.Debug ToString¨⟨0⊑word_block,14⊑word_block,15⊑word_block⟩
     # "a+f" util.Debug ToString¨⟨a Add32(F b‿c‿d)⟩
     # "a+f+X+T" util.Debug ToString a Add32(F b‿c‿d)Add32(0⊑word_block)Add32 1⊑t
@@ -80,7 +79,7 @@ ToMd5 ← {
     b c‿d‿a‿15‿22‿16⊸Op1 ↩
     # "phase1" util.Debug ToString¨ a‿b‿c‿d
 
-    Op2 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 (s⊸⌽)⌾(∾·⌽·⥊·<˘∘‿8⊸⥊)a Add32(G b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
+    Op2 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼⌾SwapBitOrder a Add32(G b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
     a b‿c‿d‿01‿05‿17⊸Op2 ↩
     d a‿b‿c‿06‿09‿18⊸Op2 ↩
     c d‿a‿b‿11‿14‿19⊸Op2 ↩
@@ -102,7 +101,7 @@ ToMd5 ← {
     b c‿d‿a‿12‿20‿32⊸Op2 ↩
     # "phase2" util.Debug ToString¨ a‿b‿c‿d
 
-    Op3 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 (s⊸⌽)⌾(∾·⌽·⥊·<˘∘‿8⊸⥊)a Add32(H b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
+    Op3 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼⌾SwapBitOrder a Add32(H b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
     a b‿c‿d‿05‿04‿33⊸Op3 ↩
     d a‿b‿c‿08‿11‿34⊸Op3 ↩
     c d‿a‿b‿11‿16‿35⊸Op3 ↩
@@ -124,7 +123,7 @@ ToMd5 ← {
     b c‿d‿a‿02‿23‿48⊸Op3 ↩
     # "phase3" util.Debug ToString¨ a‿b‿c‿d
 
-    Op4 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 (s⊸⌽)⌾(∾·⌽·⥊·<˘∘‿8⊸⥊)a Add32(J b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
+    Op4 ← {b‿c‿d‿k‿s‿i 𝕊 a : b Add32 s⊸⌽⁼⌾SwapBitOrder a Add32(J b‿c‿d)Add32(k⊑word_block)Add32 i⊑t}
     a b‿c‿d‿00‿06‿49⊸Op4 ↩
     d a‿b‿c‿07‿10‿50⊸Op4 ↩
     c d‿a‿b‿14‿15‿51⊸Op4 ↩
@@ -146,12 +145,7 @@ ToMd5 ← {
     b c‿d‿a‿09‿21‿64⊸Op4 ↩
     # "phase4" util.Debug ToString¨ a‿b‿c‿d
 
-    a aa⊸Add32 ↩
-    b bb⊸Add32 ↩
-    c cc⊸Add32 ↩
-    d dd⊸Add32 ↩
-    # "phase5" util.Debug ToString¨ a‿b‿c‿d
-    a‿b‿c‿d
+    𝕩 Add32¨ a‿b‿c‿d
   }´⌽<˘∘‿512⥊msg
   ⌽⌾(⥊∘(<˘)∘‿8⊸⥊)¨abcd
 }
