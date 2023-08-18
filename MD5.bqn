@@ -30,10 +30,12 @@ t ← Encode32¨⟨
 ⟩
 # "ToString encode32 8FFF0000" util.Debug ToString Encode32 "8FFF0000"
 a‿b‿c‿d ← Encode32¨⟨"67452301","EFCDAB89","98BADCFE","10325476"⟩
-F ← {x‿y‿z : (x 32‿32 •bit._and y) 32‿32 •bit._or ((32‿32 •bit._not x) 32‿32 •bit._and z)}
-G ← {x‿y‿z : (x 32‿32 •bit._and z) 32‿32 •bit._or (y 32‿32 •bit._and (1‿1 •bit._not z))}
+F ← {x‿y‿z : z 32‿32 •bit._xor x 32‿32 •bit._and y 32‿32 •bit._xor z}
+# F ← {x‿y‿z : (x 32‿32 •bit._and y) 32‿32 •bit._or z 32‿32 •bit._and 32‿1 •bit._not x}
+G ← {x‿y‿z : y 32‿32 •bit._xor z 32‿32 •bit._and x 32‿32 •bit._xor y}
+# G ← {x‿y‿z : (x 32‿32 •bit._and z) 32‿32 •bit._or y 32‿32 •bit._and 32‿1 •bit._not z}
 H ← {x‿y‿z : x 32‿32 •bit._xor y 32‿32 •bit._xor z}
-J ← {x‿y‿z : y 32‿32 •bit._xor (x 32‿32 •bit._or (1‿1 •bit._not z))}
+J ← {x‿y‿z : y 32‿32 •bit._xor x 32‿32 •bit._or 32‿1 •bit._not z}
 Add32 ← 32‿1•bit._add
 
 ToMd5 ← {
