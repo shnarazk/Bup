@@ -3,10 +3,11 @@ env←{v⇐⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}
 # util ← •Import "/util.bqn"∾˜"." env.Var⌾⋈ "BQN_LIB"
 ⟨Md5⟩ ⇐
 
+modulo ← 2⋆8
 SwapByteOrder ← ⌽·⥊·<˘∘‿8⊸⥊
 SwapBitOrder ← ⥊·⌽˘∘‿8⊸⥊
 
-Encode32 ← {∾⌽(⌽∘(⟨8‿'i',1‿'u'⟩•bit._cast)∘⋈∘{127<𝕩 ? 𝕩-256 ; 𝕩})¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
+Encode32 ← {∾⌽(⌽∘(⟨8‿'i',1‿'u'⟩•bit._cast)∘⋈∘{127<𝕩 ? 𝕩-modulo ; 𝕩})¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
 # Encode32 ← {∾⌽(⌽∘(8⊸↑)∘(⟨16‿'u',1‿'u'⟩•bit._cast)∘⋈)¨{𝕩+16×𝕨}´˘∘‿2⥊"0123456789ABCDEF"⊐𝕩}
 ToString ← {⥊((⊑⟜"0123456789abcdef"¨·16⊸(⌊∘(÷˜)⋈|)·{𝕨+2×𝕩}´·⌽>)˘SwapByteOrder)𝕩}
 t ← Encode32¨⟨
@@ -30,7 +31,6 @@ t ← Encode32¨⟨
 ⟩
 # "ToString encode32 8FFF0000" util.Debug ToString Encode32 "8FFF0000"
 a‿b‿c‿d ← Encode32¨⟨"67452301","EFCDAB89","98BADCFE","10325476"⟩
-modulo ← 2⋆8
 F ← {x‿y‿z : (x 32‿32 •bit._and y) 32‿32 •bit._or ((32‿32 •bit._not x) 32‿32 •bit._and z)}
 G ← {x‿y‿z : (x 32‿32 •bit._and z) 32‿32 •bit._or (y 32‿32 •bit._and (1‿1 •bit._not z))}
 H ← {x‿y‿z : x 32‿32 •bit._xor y 32‿32 •bit._xor z}
@@ -152,13 +152,13 @@ ToMd5 ← {
 
 Md5 ← ∾ToString¨∘ToMd5
 
-!"d41d8cd98f00b204e9800998ecf8427e"≡Md5 ""
-!"0cc175b9c0f1b6a831c399e269772661"≡Md5 "a"
-!"900150983cd24fb0d6963f7d28e17f72"≡Md5 "abc"
-!"f96b697d7cb7938d525a2f31aaf161d0"≡Md5 "message digest"
-!"c3fcd3d76192e4007dfb496cca67e13b"≡Md5 "abcdefghijklmnopqrstuvwxyz"
-!"d174ab98d277d9f5a5611c2c9f419d9f"≡Md5 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-!"57edf4a22be3c955ac49da2e2107b67a"≡Md5 "12345678901234567890123456789012345678901234567890123456789012345678901234567890"
+!"d41d8cd98f00b204e9800998ecf8427e"≡ Md5 ""
+!"0cc175b9c0f1b6a831c399e269772661"≡ Md5 "a"
+!"900150983cd24fb0d6963f7d28e17f72"≡ Md5 "abc"
+!"f96b697d7cb7938d525a2f31aaf161d0"≡ Md5 "message digest"
+!"c3fcd3d76192e4007dfb496cca67e13b"≡ Md5 "abcdefghijklmnopqrstuvwxyz"
+!"d174ab98d277d9f5a5611c2c9f419d9f"≡ Md5 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+!"57edf4a22be3c955ac49da2e2107b67a"≡ Md5 "12345678901234567890123456789012345678901234567890123456789012345678901234567890"
 
 # •Show ((∾⟜(8⊸×)≠)⊸⋈(≍○⋈)Md5)"message digest"
 # •Show ((∾⟜(8⊸×)≠)⊸⋈(≍○⋈)Md5)"abcdefghijklmnopqrstuvwxyz"
