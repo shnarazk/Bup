@@ -7,8 +7,11 @@ env ← {v⇐⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+1
 !"900150983cd24fb0d6963f7d28e17f72"≡ Md5 "abc"
 !"f96b697d7cb7938d525a2f31aaf161d0"≡ Md5 "message digest"
 !"c3fcd3d76192e4007dfb496cca67e13b"≡ Md5 "abcdefghijklmnopqrstuvwxyz"
-!"d174ab98d277d9f5a5611c2c9f419d9f"≡ Md5 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+!"d174ab98d277d9f5a5611c2c9f419d9f"≡ Md5 m ← "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 !"57edf4a22be3c955ac49da2e2107b67a"≡ Md5 "12345678901234567890123456789012345678901234567890123456789012345678901234567890"
 
-"call external process" util.Debug 1000 {¯1↓1⊑ •SH "md5"‿"-qs"‿𝕩}•_timed "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-"native implementation" util.Debug 1000 Md5•_timed "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+("external process len="∾(•Fmt ≠m))  util.Debug 1000 {¯1↓1⊑ •SH "md5"‿"-qs"‿𝕩}•_timed m
+("native implement len="∾(•Fmt ≠m)) util.Debug 1000 Md5•_timed m
+l ← ≠m7 ← ∾˜⍟7 m
+("external process len="∾(•Fmt l)) util.Debug 1000 {¯1↓1⊑ •SH "md5"‿"-qs"‿𝕩}•_timed m7
+("native implement len="∾(•Fmt l)) util.Debug 1000 Md5•_timed m7
