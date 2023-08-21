@@ -77,13 +77,13 @@ color ← {
   reverse ⇐ csi∾"001m"
   reset   ⇐ csi∾"0m"
   RGB ⇐ {
-          𝕊 r‿g‿b : esc∾"[38;2;"∾(•Fmt r)∾";"∾(•Fmt g)∾";"∾(•Fmt b)∾"m" ;
-        0 𝕊 r‿g‿b : esc∾"[38;2;"∾(•Fmt r)∾";"∾(•Fmt g)∾";"∾(•Fmt b)∾"m" ;
-    r‿g‿b 𝕊 0     : esc∾"[48;2;"∾(•Fmt r)∾";"∾(•Fmt g)∾";"∾(•Fmt b)∾"m" ;
+          𝕊 r‿g‿b : esc∾"[38;2;"∾(•Repr r)∾";"∾(•Repr g)∾";"∾(•Repr b)∾"m" ;
+        0 𝕊 r‿g‿b : esc∾"[38;2;"∾(•Repr r)∾";"∾(•Repr g)∾";"∾(•Repr b)∾"m" ;
+    r‿g‿b 𝕊 0     : esc∾"[48;2;"∾(•Repr r)∾";"∾(•Repr g)∾";"∾(•Repr b)∾"m" ;
        bg 𝕊 fg    : (bg 𝕊 0)∾𝕊 fg
   }
   Out ⇐ {c 𝕊 t : c∾t∾reset}
-  Fmt ⇐ {c 𝕊 t : c∾(•Fmt t)∾reset}
+  Fmt ⇐ {c 𝕊 t : c∾(•Repr t)∾reset}
 }
 term ← {
   # https://en.wikipedia.org/wiki/ANSI_escape_code
@@ -93,19 +93,19 @@ term ← {
   csi ⇐ esc∾"["
   reverse ⇐ csi∾"001m"
   reset ⇐ csi∾"0m"
-  Revert ⇐ {•term.OutRaw•ToUTF8 csi∾(•Fmt 𝕩)∾"A"∾csi∾"1G"∾csi∾"0J"}
+  Revert ⇐ {•term.OutRaw•ToUTF8 csi∾(•Repr 𝕩)∾"A"∾csi∾"1G"∾csi∾"0J"}
   Up ⇐ {
-    •term.OutRaw•ToUTF8 csi∾(•Fmt 𝕩)∾"A" ;
-    csi∾(•Fmt 𝕩)∾"A"
+    •term.OutRaw•ToUTF8 csi∾(•Repr 𝕩)∾"A" ;
+    csi∾(•Repr 𝕩)∾"A"
   }
   clear ⇐ csi∾"1G"∾csi∾"0J"
   Print ⇐ {
-    •term.OutRaw•ToUTF8 •Fmt 𝕩 ;
-    •term.OutRaw•ToUTF8 𝕨∾(•Fmt 𝕩)∾reset
+    •term.OutRaw•ToUTF8 •Repr 𝕩 ;
+    •term.OutRaw•ToUTF8 𝕨∾(•Repr 𝕩)∾reset
   }
   Println ⇐ {
-    •Out •Fmt 𝕩 ;
-    •Out 𝕨∾(•Fmt 𝕩)∾reset
+    •Out •Repr 𝕩 ;
+    •Out 𝕨∾(•Repr 𝕩)∾reset
   }
   Out ⇐ {
     •term.OutRaw•ToUTF8 𝕩∾reset ;
@@ -138,16 +138,16 @@ Progress ← {
   𝕊 𝕩      : 0 𝕊 𝕩 ;
   0 𝕊 𝕩    :
     textc ← color.RGB 20‿100‿200
-    len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Fmt 𝕩}𝕩
+    len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Repr 𝕩}𝕩
     textc term.OutLn text
-    term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear
+    term.Out term.csi∾(•Repr 1+len)∾"A"∾term.clear
     𝕩 ;
   @ 𝕊 𝕩    : 𝕩 ;
   ⟨⟩ 𝕊 𝕩   : 𝕩 ;
   spec 𝕊 𝕩 :
     label ← (220‿220‿220 color.RGB 180‿80‿80)
     textc ← color.RGB 20‿100‿200
-    len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Fmt 𝕩}𝕩
+    len ← +´term.lf= text ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Repr 𝕩}𝕩
     {
       1=•Type spec ?
         textc term.OutLn text
@@ -156,7 +156,7 @@ Progress ← {
         label term.OutLn spec∾":"∾(' '˙¨↕8-8|5+≠spec)∾textc color.Out text ;
       "invalid 𝕨 for Progress"!0
     }
-    {∞>spec ? term.Out term.csi∾(•Fmt 1+len)∾"A"∾term.clear ; @}
+    {∞>spec ? term.Out term.csi∾(•Repr 1+len)∾"A"∾term.clear ; @}
     𝕩
 }
 
