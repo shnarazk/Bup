@@ -1,5 +1,5 @@
 #!/usr/bin/env cbqn
-env ← {v⇐⍉>⊑∘⊐⟜'='⊸(↑⋈1⊸↓∘↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env",Var⇐{⊐⟜𝕩⊸⊏⟜(∾⟜@)˝v}}
+env ← {v⇐⍉>⊑∘⊐⟜'='⊸(↑⋈1↓↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env",Var⇐{⊐⟜𝕩⊸⊏⟜(∾⟜@)˝v}}
 ⟨Md5⟩‿util ← •Import¨"/MD5.bqn"‿"/util.bqn"∾˜¨<∾env.Var⋈"BQN_LIB"
 
 !"d41d8cd98f00b204e9800998ecf8427e"≡ Md5 ""
