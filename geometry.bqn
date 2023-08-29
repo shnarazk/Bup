@@ -1,11 +1,14 @@
 ⟨
   dir5, dir9
-  Ext,Shift,Rotate,Neighbor5,Neighbor9
+  Ext,Shift,Rotate,
+  Neighbor4,Neighbor5,Neighbor8,Neighbor9
   version
 ⟩ ⇐
 
 dir5 ← ⟨0‿0,1‿0,¯1‿0,0‿1,0‿¯1⟩
+dir4 ← ⟨1‿0,¯1‿0,0‿1,0‿¯1⟩
 dir9 ← -¯1+⥊↕3‿3
+dir8 ← 0‿0⊸≢¨⊸/¯1+⥊↕3‿3
 
 # Extend a 2D matrix with 1-width borders which are ∞
 #    geo ← •Import "geometric.bqn"
@@ -125,6 +128,10 @@ Neighbor5 ← {
     𝕊 m : {∾¨´dir5 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩} m ;
   f 𝕊 m : {∾¨´dir5 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩} m
 }
+Neighbor4 ← {
+    𝕊 m : {∾¨´dir4 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩} m ;
+  f 𝕊 m : {∾¨´dir4 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩} m
+}
 
 # Neighbor self and eight neighbars as a list and invalid neighbars are prsented by 'fill'
 # they are ordered as ¯1+⥊↕3‿3. So the center is the 5th item.
@@ -146,5 +153,9 @@ Neighbor9 ← {
     𝕊 m : {∾¨´dir9 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩}m ;
   f 𝕊 m : {∾¨´dir9 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩}m
 }
+Neighbor8 ← {
+    𝕊 m : {∾¨´dir8 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩}m ;
+  f 𝕊 m : {∾¨´dir8 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩}m
+}
 
-version ⇐ "0.4.0"
+version ⇐ "0.5.0"
