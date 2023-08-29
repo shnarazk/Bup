@@ -1,12 +1,13 @@
 #!/usr/bin/env cbqn
 
-LinesOfCode ⇐ {𝕊 filename :
+whitespaces ← @+⟨9,32⟩
+LinesOfCode ⇐ {
   +´{
     ∧´'#'≠𝕩 ? ⟨⟩≢𝕩 ;
     cs ← 𝕩⊸⊐⌾⋈'#'
     es ← ⌊´𝕩⊐"'"""
     es<cs
-  }∘(¬∘∊⟜" "⊸/)¨•file.Lines filename
+  }∘(¬∘∊⟜whitespaces⊸/)¨•file.Lines 𝕩
 }
 
 {
