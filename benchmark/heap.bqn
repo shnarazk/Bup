@@ -97,6 +97,50 @@ g.Push<⟨2⟩
 env ← {v⇐⍉>⊑∘⊐⟜'='⊸(↑⋈1↓↓)¨{-¬(¬×1++`)𝕩=@+10}⊸⊔1⊑•SH<"env",Var⇐{⊐⟜𝕩⊸⊏⟜(∾⟜@)˝v}}
 heap‿util ← •Import¨"/heap.bqn"‿"/util.bqn"∾˜¨<∾env.Var⋈"BQN_LIB"
 
+H ↩ (≤)heap._to_heap
+h.Push 1
+# •Show h.Dump @
+# •Show ⊑h.Peek @
+h.Push 10
+h.Push 50
+h.Push 4
+h.Push 20
+h.Push 3
+h.Push 8
+h.Push 2
+# •Show h.Dump @
+! 1 ≡ h.Pop @
+! 2 ≡ h.Pop @
+! 3 ≡ h.Pop @
+! 4 ≡ h.Pop @
+! 8 ≡ h.Pop @
+! 10 ≡ h.Pop @
+! 20 ≡ h.Pop @
+! 50 ≡ h.Pop @
+# •Show h.Dump @
+
+# •Show ⍋"1"‿"10"
+
+G ↩ (⊑∘⍋⋈)heap._to_heap
+g.Push"1"
+g.Push"10"
+g.Push"50"
+g.Push"4"
+g.Push"20"
+g.Push"3"
+g.Push"8"
+g.Push"2"
+# •Show g.Dump @
+! "8" ≡ g.Pop @
+! "50" ≡ g.Pop @
+! "4" ≡ g.Pop @
+! "3" ≡ g.Pop @
+! "20" ≡ g.Pop @
+! "2" ≡ g.Pop @
+! "10" ≡ g.Pop @
+! "1" ≡ g.Pop @
+# •Show g.Dump @
+
 Push ← {
   n ← ≠𝕩
   𝕨.Push¨𝕩
@@ -105,17 +149,22 @@ Run ← {
   n ← ≠𝕩
   𝕨.Push¨𝕩
   r ← 𝕨.Pop⍟n@
-  !r≢∧𝕩
+  # !r≢∧𝕩
 }
-seed ← •rand.Deal 1e4
-("old Push "∾(•Fmt ≠seed)) util.Debug 4 (((≤○⊑)_to_heap)⊸Push)•_timed seed
-("new Push "∾(•Fmt ≠seed)) util.Debug 4 (((≤○⊑)heap._to_heap)⊸Push)•_timed seed
-("old implementation "∾(•Fmt ≠seed)) util.Debug 4 (((≤○⊑)_to_heap)⊸Run)•_timed seed
-("new implementation "∾(•Fmt ≠seed)) util.Debug 4 (((≤○⊑)heap._to_heap)⊸Run)•_timed seed
-seed ↩ •rand.Deal 2e4
-("old implementation "∾(•Fmt ≠seed)) util.Debug 4 (((≤○⊑)_to_heap)⊸Run)•_timed seed
-("new implementation "∾(•Fmt ≠seed)) util.Debug 4 (((≤○⊑)heap._to_heap)⊸Run)•_timed seed
-seed ↩ •rand.Deal 4e4
-("old implementation "∾(•Fmt ≠seed)) util.Debug 4 (((≤○⊑)_to_heap)⊸Run)•_timed seed
-("new implementation "∾(•Fmt ≠seed)) util.Debug 4 (((≤○⊑)heap._to_heap)⊸Run)•_timed seed
-# ("current implementation"∾(•Fmt ≠m)) util.Debug 1000 Md5•_timed m
+
+seed ← ⌽⥊⌽˘1e2‿1e2⥊↕1e4
+("old Push     "∾(•Fmt ≠seed)) util.Debug 1 (((≤○⊑)_to_heap)⊸Push)•_timed seed
+("old Push&Pop "∾(•Fmt ≠seed)) util.Debug 1 (((≤○⊑)_to_heap)⊸Run)•_timed seed
+("new Push     "∾(•Fmt ≠seed)) util.Debug 10 (((≤)heap._to_heap)⊸Push)•_timed seed
+("new Push&Pop "∾(•Fmt ≠seed)) util.Debug 10 (((≤)heap._to_heap)⊸Run)•_timed seed
+
+seed ↩ ⌽⥊⌽˘2e2‿2e2⥊↕4e4
+("old Push&Pop "∾(•Fmt ≠seed)) util.Debug 1 (((≤○⊑)_to_heap)⊸Run)•_timed seed
+("new Push&Pop "∾(•Fmt ≠seed)) util.Debug 10 (((≤)heap._to_heap)⊸Run)•_timed seed
+
+seed ↩ ⌽⥊⌽˘3e2‿3e2⥊↕9e4
+("old Push&Pop "∾(•Fmt ≠seed)) util.Debug 1 (((≤○⊑)_to_heap)⊸Run)•_timed seed
+("new Push&Pop "∾(•Fmt ≠seed)) util.Debug 10 (((≤)heap._to_heap)⊸Run)•_timed seed
+
+seed ↩ ⌽⥊⌽˘4e2‿4e2⥊↕16e4
+("new Push&Pop "∾(•Fmt ≠seed)) util.Debug 4 (((≤)heap._to_heap)⊸Run)•_timed seed
