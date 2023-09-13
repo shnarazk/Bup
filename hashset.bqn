@@ -2,7 +2,7 @@
 # HashSet keys:      return a mutable hashset h implementing
 #   h.Count any:     return number of keys defined by h
 #   h.Has key:       return 1 if key is present and 0 otherwise
-#   h.Set key:       set value (may overwrite); return h
+#   h.Set key:       add key; return h
 #   h.Delete key:    remove corresponding value; return h
 #   h.copy any:      return a new hashset with same keys
 
@@ -48,13 +48,15 @@ HashSet ⇐ {𝕩.Self𝕩}∘{ 𝕊 keys: Self⇐{self↩𝕩}
   DefKey ← { 𝕊 key:
     Next•_while_(¯1⊸≠◶⟨0,"Duplicate key"!key≢⊑⟜keys⟩⊑⟜table) Ind key
   }
-  Set ⇐ { 𝕊 key:
-    i ← Next•_while_(¯1⊸≠◶⟨0,key≢⊑⟜keys⟩ ⊑⟜table) Ind key
-    t ← i⊑table
-    {
-      len ST i ⋄ keys∾↩<key ⋄ IncLen 1
-    }
-    self
+  Set ⇐ {
+    𝕊 key : self.Has key ? self ;
+    𝕊 key :
+      i ← Next•_while_(¯1⊸≠◶⟨0,key≢⊑⟜keys⟩ ⊑⟜table) Ind key
+      t ← i⊑table
+      {
+        len ST i ⋄ keys∾↩<key ⋄ IncLen 1
+      }
+      self
   }
   AsList ⇐ {𝕊 : keys}
   Values ⇐ {𝕊 : 1 ; 𝕊⁼ : tombstone⊸≢¨⊸/keys ; 𝕨𝕊⁼𝕩 : 1⋈˜¨tombstone⊸≢¨⊸/keys}
