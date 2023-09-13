@@ -122,9 +122,10 @@ Debug ← {
   ⟨⟩ 𝕊 𝕩 : 𝕩 ;
    𝕨 𝕊 𝕩 :
     '#'≠⊑𝕨 ?
-      label ← (220‿220‿220 color.RGB 180‿80‿80)
+      col ← (220‿220‿220 color.RGB 180‿80‿80)
       text  ← color.RGB 20‿100‿200
-      label term.Outln " - "∾𝕨∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾text color.Fmt 𝕩
+      label ← {0=•Type 𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Repr 𝕩}𝕨
+      col term.Outln " - "∾label∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾text color.Fmt 𝕩
       𝕩 ;
     𝕩
 }
@@ -189,4 +190,4 @@ env←{
 # "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEF"
 # "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEF1"‿"NOT_DEF2"
 
-version ← "0.8.1"
+version ← "0.8.2"
