@@ -1,4 +1,6 @@
-⟨IsString,LeftFill⟩ ⇐
+⟨AsString,IsString,LeftFill⟩ ⇐
+
+AsString ← {0=•Type 𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Repr 𝕩}
 
 IsString ← {0=•Type 𝕩 ? ⟨⟩≢𝕩 ? ∧´(2=•Type)¨𝕩 ; 0}
 # "IsString spec1"! IsString "1"
