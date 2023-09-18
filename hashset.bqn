@@ -4,7 +4,8 @@
 #   h.Has key:       return 1 if key is present and 0 otherwise
 #   h.Set key:       add key; return h
 #   h.Delete key:    remove corresponding value; return h
-#   h.copy any:      return a new hashset with same keys
+#   h.Copy any:      return a new hashset with same keys
+#   h.Values⁼ any:   return all keys
 
 # 𝕗_hash is a function returning index in (2⋆n)-length table
 ⟨_hash⟩ ← {
