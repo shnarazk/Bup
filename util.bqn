@@ -1,7 +1,7 @@
 ⟨
   If,IfElse,_doWhile_,Match,Select,Switch,Test
   Swap
-  StartsWith,ParseInt,ParseInts,ParseFloats,Tokenize,LeftFill,ValidYear
+  StartsWith,ParseInt,ParseInts,ParseFloats,Split,LeftFill,ValidYear
   color,term
   Debug,Progress
   MaxAt,MinAt
@@ -41,9 +41,9 @@ ParseFloats ← •ParseFloat¨·(∨´"0123456789"⊸∊)¨⊸/"0123456789.-"�
 ParseInts   ← ⌊∘•ParseFloat¨·(∨´"0123456789"⊸∊)¨⊸/"0123456789-"⊸((⊢-˜¬×·+`»⊸<)∘(¬∊)˜⊔⊢)
 ParseInt    ← ⊑ParseInts
 
-Tokenize ← {" " 𝕊 𝕩 ; (𝕩¬∘∊𝕨)(¬-˜⊢×·+`»⊸>)⊸⊔𝕩}
-# "Tokenize spec1" ! ⟨"A","B,C,","D"⟩  ≡  " " Tokenize "A B,C, D"
-# "Tokenize spec2" ! ⟨"A","B","C","D"⟩ ≡ " ," Tokenize "A B,C, D"
+Split ← {" " 𝕊 𝕩 ; (𝕩¬∘∊𝕨)(¬-˜⊢×·+`»⊸>)⊸⊔𝕩}
+# "Split spec1" ! ⟨"A","B,C,","D"⟩  ≡  " " Split "A B,C, D"
+# "Split spec2" ! ⟨"A","B","C","D"⟩ ≡ " ," Split "A B,C, D"
 
 LeftFill ← {template 𝕊 value : value∾˜(0⌈template-○≠value)↑template}
 # "LeftFill spec1" !  "   1" ≡ "    " LeftFill "1"
@@ -190,4 +190,4 @@ env←{
 # "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEF"
 # "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEF1"‿"NOT_DEF2"
 
-version ← "0.8.2"
+version ← "0.9.0"
