@@ -11,7 +11,7 @@ dir9 ← -¯1+⥊↕3‿3
 dir8 ← 0‿0⊸≢¨⊸/¯1+⥊↕3‿3
 
 # Extend a 2D matrix with 1-width borders which are ∞
-#    geo ← •Import "geometric.bqn"
+#    geo ← •Import "geometry.bqn"
 # {dir5‿dir9‿ext‿shift‿gather5‿gather9‿version⇐}
 #    ∞ geo.Ext ↕3‿3
 # ┌─
@@ -110,7 +110,7 @@ Rotate ← {y‿x 𝕊 a : >{y⊸⌽⎉1⌾⍉x⊸⌽⎉1 𝕩}¨<a}
 
 # Neighbor self and four neighbars as a list and invalid neighbars are prsented by 'fill'
 # they are ordered as self up down left right
-#    geo ← •Import "geometric.bqn"
+#    geo ← •Import "geometry.bqn"
 # {dir5‿dir9‿ext‿shift‿gather5‿gather9‿version⇐}
 #    m ← 3‿3⥊↕9
 # ┌─
