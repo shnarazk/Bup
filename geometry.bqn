@@ -125,12 +125,12 @@ Rotate ← {y‿x 𝕊 a : >{y⊸⌽⎉1⌾⍉x⊸⌽⎉1 𝕩}¨<a}
 #   ⟨ 6 3 ∞ ∞ 7 ⟩ ⟨ 7 4 ∞ 6 8 ⟩ ⟨ 8 5 ∞ 7 ∞ ⟩
 #                                             ┘
 Neighbor5 ← {
-    𝕊 m : {∾¨´dir5 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩} m ;
-  f 𝕊 m : {∾¨´dir5 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩} m
+    𝕊 m : {(⟨⟩¨𝕩)<⊸∾¨´dir5 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩} m ;
+  f 𝕊 m : {(⟨⟩¨𝕩)<⊸∾¨´dir5 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩} m
 }
 Neighbor4 ← {
-    𝕊 m : {∾¨´dir4 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩} m ;
-  f 𝕊 m : {∾¨´dir4 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩} m
+    𝕊 m : {(⟨⟩¨𝕩)<⊸∾¨´dir4 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩} m ;
+  f 𝕊 m : {(⟨⟩¨𝕩)<⊸∾¨´dir4 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩} m
 }
 
 # Neighbor self and eight neighbars as a list and invalid neighbars are prsented by 'fill'
@@ -150,12 +150,12 @@ Neighbor4 ← {
 #   ⟨ ∞ 3 4 ∞ 6 7 ∞ ∞ ∞ ⟩ ⟨ 3 4 5 6 7 8 ∞ ∞ ∞ ⟩ ⟨ 4 5 ∞ 7 8 ∞ ∞ ∞ ∞ ⟩
 #                                                                     ┘
 Neighbor9 ← {
-    𝕊 m : {∾¨´dir9 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩}m ;
-  f 𝕊 m : {∾¨´dir9 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩}m
+    𝕊 m : {(⟨⟩¨𝕩)<⊸∾¨´dir9 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩}m ;
+  f 𝕊 m : {(⟨⟩¨𝕩)<⊸∾¨´dir9 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩}m
 }
 Neighbor8 ← {
-    𝕊 m : {∾¨´dir8 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩}m ;
-  f 𝕊 m : {∾¨´dir8 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩}m
+    𝕊 m : {(⟨⟩¨𝕩)<⊸∾¨´dir8 Shift1{y‿x 𝔽 _𝕣 𝕩 :   y⊸𝔽⎉1⌾⍉  x⊸𝔽⎉1 𝕩}¨<𝕩}m ;
+  f 𝕊 m : {(⟨⟩¨𝕩)<⊸∾¨´dir8 Shift1{y‿x 𝔽 _𝕣 𝕩 : y‿f⊸𝔽⎉1⌾⍉x‿f⊸𝔽⎉1 𝕩}¨<𝕩}m
 }
 
 version ⇐ "0.5.0"
