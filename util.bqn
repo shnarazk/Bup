@@ -4,7 +4,7 @@
   StartsWith,ParseInt,ParseInts,ParseFloats,Split,LeftFill,ValidYear
   color,term
   Debug,Progress
-  MaxAt,MinAt
+  Digits,MaxAt,MinAt
   AbsolutePath,DataFile,ExistsOrExit
   version
 ⟩ ⇐
@@ -164,6 +164,11 @@ Progress ← {
 #
 # math functions
 #
+# convert natural number to list of digits
+Digits ← {𝕊 𝕩 : ⟨⟩ 𝕊 𝕩 ; ⟨⟩ 𝕊 0 : ⟨0⟩ ; l 𝕊 0 : l ; (𝕨∾˜10|𝕩)𝕊 𝕩⌊∘÷10}
+# !⟜(⟨0⟩⊸≡)Digits 0
+# !⟜(⟨1,2,0⟩⊸≡)Digits 120
+
 # This does not work with depth≥2
 # TODO: as ⊑∧⌾(𝕨⊏)¨
 MaxAt ← {n F l : {𝕨>○(n⊸⊑)𝕩 ? 𝕨 ; 𝕩}´l}
@@ -190,4 +195,4 @@ env←{
 # "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEF"
 # "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEF1"‿"NOT_DEF2"
 
-version ← "0.9.0"
+version ← "0.9.1"
