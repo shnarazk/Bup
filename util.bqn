@@ -3,7 +3,7 @@
   Swap
   StartsWith,ParseInt,ParseInts,ParseFloats,Split,LeftFill,ValidYear
   color,term
-  Debug,Progress
+  Debug,_unstring,_format_,Progress
   Digits,MaxAt,MinAt
   AbsolutePath,DataFile,ExistsOrExit
   version
@@ -117,6 +117,36 @@ term ← {
   }
 }
 
+DefaultDebugFormatter ← color.Fmt
+DebugFormatter ← DefaultDebugFormatter
+
+_unstring ← {
+ 𝔽 _𝕣 𝕩 :
+   DebugFormatter ↩ color.Out
+   r ← 𝔽 𝕩
+   DebugFormatter ↩ DefaultDebugFormatter
+   r
+  ;
+ 𝕨 𝔽 _𝕣 𝕩 :
+   DebugFormatter ↩ color.Out
+   r ← 𝕨 𝔽 𝕩
+   DebugFormatter ↩ DefaultDebugFormatter
+   r
+}
+_format_ ← {
+ 𝔽 _𝕣_ 𝔾 𝕩 :
+   DebugFormatter ↩ 𝔾
+   r ← 𝔽 𝕩
+   DebugFormatter ↩ DefaultDebugFormatter
+   r
+  ;
+ 𝕨 𝔽 _𝕣_ 𝔾 𝕩 :
+   DebugFormatter ↩ 𝔾
+   r ← 𝕨 𝔽 𝕩
+   DebugFormatter ↩ DefaultDebugFormatter
+   r
+}
+
 Debug ← {
      𝕊 𝕩 : "debug" 𝕊 𝕩 ;
   ⟨⟩ 𝕊 𝕩 : 𝕩 ;
@@ -125,7 +155,7 @@ Debug ← {
       col ← (220‿220‿220 color.RGB 180‿80‿80)
       text  ← color.RGB 20‿100‿200
       label ← {0=•Type 𝕩 ? 1==𝕩 ? ∧´(2=•Type)¨𝕩 ? 𝕩 ; •Repr 𝕩}𝕨
-      col term.Outln " - "∾label∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾text color.Fmt 𝕩
+      col term.Outln " - "∾label∾":"∾(' '˙¨↕8-8|5+≠𝕨)∾text DebugFormatter 𝕩
       𝕩 ;
     𝕩
 }
@@ -195,4 +225,4 @@ env←{
 # "env.Map takes default"  ! ".∞."    ≡ ".∞."    ∾∘env.Map○⋈ "NOT_DEF"
 # "env.Map takes defaults" ! "¯∞"‿"∞" ≡ "¯∞"‿"∞" ∾∘env.Map○⋈ "NOT_DEF1"‿"NOT_DEF2"
 
-version ← "0.9.1"
+version ← "0.9.2"
